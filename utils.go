@@ -24,6 +24,7 @@ func getIp() (Ip IpLine) {
 
 func logToFile(content IpLine) {
 	home, err := os.UserHomeDir()
+	ifFileDoesntExist(home, content)
 	f, err := os.OpenFile(home+"/.iplogger/log.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		panic(err)
@@ -66,4 +67,25 @@ func getLastLine() (ipline IpLine) {
 	lines := readLineByLine()
 	ipline = lines[len(lines)-1]
 	return
+}
+
+func ifFileDoesntExist(home string, content IpLine) {
+	if !fileExists(home + "/.iplogger/log.txt") {
+		f, err := os.OpenFile(home+"/.iplogger/log.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			panic(err)
+		}
+		if _, err = f.WriteString(content.Ip + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
+			panic(err)
+		}
+	}
+}
+
+func fileExists(name string) bool {
+	if _, err := os.Stat(name); err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
 }
