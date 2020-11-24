@@ -27,6 +27,10 @@ func getIp() (Ip IpLine) {
 func logToFile(content IpLine) {
 	// Function to log Ip Address to the destination file.
 	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	createFolder(home)
 	ifFileDoesntExist(home, content)
 	f, err := os.OpenFile(home+"/.iplogger/log.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
@@ -98,4 +102,15 @@ func fileExists(name string) bool {
 		}
 	}
 	return true
+}
+
+func createFolder(home string) {
+	// Create the new directory if it doesn't exist
+	_, err := os.Stat(home + "/.iplogger")
+	if os.IsNotExist(err) {
+		err := os.Mkdir(home+"/.iplogger", 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
