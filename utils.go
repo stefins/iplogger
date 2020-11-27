@@ -15,7 +15,7 @@ func getIp() (Ip IpLine) {
 	resp, err := http.Get("https://ifconfig.me")
 	if err != nil {
 		// this returns 'Connection Not Available' if internet is not available
-		Ip = IpLine{"Connection Not Available", time.Now()}
+		Ip = IpLine{"", time.Now()}
 		return
 	}
 	defer resp.Body.Close()
@@ -39,9 +39,11 @@ func logToFile(content IpLine) {
 	defer f.Close()
 	lastIPLine := getLastLine()
 	if lastIPLine.Ip != content.Ip {
-		// Also logs the current time in RFC1123 format seperated by '*'
-		if _, err = f.WriteString(content.Ip + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
-			panic(err)
+		if content.Ip != "" {
+			// Also logs the current time in RFC1123 format seperated by '*'
+			if _, err = f.WriteString(content.Ip + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
+				panic(err)
+			}
 		}
 	}
 }
