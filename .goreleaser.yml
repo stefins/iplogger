@@ -24,9 +24,3 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
-brews:
-  - tap:
-      owner: iamstefin
-      name: homebrew-iplogger
-    homepage: "https://github.com/iamstefin/iplogger"
-    description: " log your public IP address. "
