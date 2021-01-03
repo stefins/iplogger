@@ -1,0 +1,10 @@
+# github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
+## explicit
+github.com/kardianos/osext
+# github.com/sevlyar/go-daemon v0.1.5
+## explicit
+github.com/sevlyar/go-daemon
+# golang.org/x/sys v0.0.0-20201231184435-2d18734c6014
+## explicit
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
