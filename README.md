@@ -11,10 +11,9 @@ or download from releases
 ## Usage
 
 ```bash
-iplogger &
-disown
+iplogger
 ```
-### To view the logged ip addresses
+### To view the logged IP addresses
 ```bash
 cat ~/.iplogger/log.txt
 ```
