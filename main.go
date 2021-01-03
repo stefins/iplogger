@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -16,6 +17,7 @@ type IPLine struct {
 func main() {
 	cntxt := &daemon.Context{}
 	d, err := cntxt.Reborn()
+	fmt.Printf("[IPLogger Started!] PID: %v \n", d.Pid)
 	if err != nil {
 		log.Fatal("Unable to run: ", err)
 	}
