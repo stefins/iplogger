@@ -1,21 +1,37 @@
 package main
 
 import (
+	"log"
 	"time"
+
+	"github.com/sevlyar/go-daemon"
 )
 
 // IPLine is a struct that stores the IP and current time.
-type IpLine struct {
-	Ip   string
+type IPLine struct {
+	IP   string
 	Time time.Time
 }
 
 func main() {
-	c := make(chan IpLine)
+	cntxt := &daemon.Context{}
+	d, err := cntxt.Reborn()
+	if err != nil {
+		log.Fatal("Unable to run: ", err)
+	}
+	if d != nil {
+		return
+	}
+	defer cntxt.Release()
+	runService()
+}
+
+func runService() {
+	c := make(chan IPLine)
 	quit := make(chan bool)
 	go func() {
 		for {
-			c1 := getIp()
+			c1 := getIP()
 			c <- c1
 			// Check the IP every 20 Minute.
 			time.Sleep(20 * time.Minute)

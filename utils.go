@@ -10,21 +10,21 @@ import (
 	"time"
 )
 
-func getIp() (Ip IpLine) {
+func getIP() (IP IPLine) {
 	// Function to get the current ip address of the device
 	resp, err := http.Get("https://ifconfig.me")
 	if err != nil {
 		// this returns 'Connection Not Available' if internet is not available
-		Ip = IpLine{"", time.Now()}
+		IP = IPLine{"", time.Now()}
 		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	Ip = IpLine{string(body), time.Now()}
+	IP = IPLine{string(body), time.Now()}
 	return
 }
 
-func logToFile(content IpLine) {
+func logToFile(content IPLine) {
 	// Function to log Ip Address to the destination file.
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -38,17 +38,17 @@ func logToFile(content IpLine) {
 	}
 	defer f.Close()
 	lastIPLine := getLastLine()
-	if lastIPLine.Ip != content.Ip {
-		if content.Ip != "" {
+	if lastIPLine.IP != content.IP {
+		if content.IP != "" {
 			// Also logs the current time in RFC1123 format seperated by '*'
-			if _, err = f.WriteString(content.Ip + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
+			if _, err = f.WriteString(content.IP + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
 				panic(err)
 			}
 		}
 	}
 }
 
-func readLineByLine() (ipline []IpLine) {
+func readLineByLine() (ipline []IPLine) {
 	// Function to read all the IP address and time from the file
 	home, err := os.UserHomeDir()
 	file, err := os.Open(home + "/.iplogger/log.txt")
@@ -66,7 +66,7 @@ func readLineByLine() (ipline []IpLine) {
 		if err != nil {
 			panic(err)
 		}
-		ipline = append(ipline, IpLine{Ip: dividedStrings[0], Time: parsedTime})
+		ipline = append(ipline, IPLine{IP: dividedStrings[0], Time: parsedTime})
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -75,14 +75,14 @@ func readLineByLine() (ipline []IpLine) {
 	return
 }
 
-func getLastLine() (ipline IpLine) {
+func getLastLine() (ipline IPLine) {
 	// Function to return the last line of the log file
 	lines := readLineByLine()
 	ipline = lines[len(lines)-1]
 	return
 }
 
-func ifFileDoesntExist(home string, content IpLine) {
+func ifFileDoesntExist(home string, content IPLine) {
 	// Function to create the file if it doesn't exist in the destination
 	// (also write the first line)
 	if !fileExists(home + "/.iplogger/log.txt") {
@@ -90,7 +90,7 @@ func ifFileDoesntExist(home string, content IpLine) {
 		if err != nil {
 			panic(err)
 		}
-		if _, err = f.WriteString(content.Ip + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
+		if _, err = f.WriteString(content.IP + "*" + content.Time.Format(time.RFC1123) + "\n"); err != nil {
 			panic(err)
 		}
 	}
