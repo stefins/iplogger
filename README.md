@@ -4,7 +4,7 @@ A tiny Go application to log your public IP address every 20 minutes.
 ## Installation
 
 ```bash
-go get -u github.com/iamstefin/iplogger
+go get -u github.com/stefins/iplogger
 ```
 or download from releases
 
